@@ -1,49 +1,53 @@
-                # --------------- What's happening here? --------------- #
-                # Import os module - allows us to create file paths across
-                # operating systems
-                # Import csv module for reading csv files
-                # --------------- Code listed below -------------------- #
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Import dependencies: os module & csv module
+    #   os - allows you to create file paths across operating systems
+    #   csv - for reading csv files
+    #   ---------------------------- CODE BELOW ---------------------------- #
 import os
 import csv
-                # --------------- What's happening here? --------------- #
-                # Set path & "join" file         
-                # --------------- Code listed below -------------------- #
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Set path & "join" file         
+    #   ---------------------------- CODE BELOW ---------------------------- #
 csvpath = os.path.join('PyPoll', 'Resources', 'election_data.csv') 
 
-                # --------------- What's happening here? --------------- #
-                # Set text file output parameters
-                # --------------- Code listed below -------------------- #
-text_file_path = "output.txt"
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Set text file output parameters
+    #   ---------------------------- CODE BELOW ---------------------------- #
+#text_file_path = "output.txt"
 
-                # --------------- What's happening here? --------------- #
-                # Set variables, empty lists & text formatting
-                # --------------- Code listed below -------------------- #
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Set variables, empty lists, dictionaries & string/text formatting
+    #   ---------------------------- CODE BELOW ---------------------------- #
 total_votes = 0
 candidates = {}
 candidates_percentage = {}
 winner = ""
 winner_count = 0
 
-                # --------------- What's happening here? --------------- #
-                # Opening file using "read" mode; Specifying variable to
-                #  hold contents
-                # --------------- Code listed below -------------------- #
-
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Open file using "read" mode; Specify variable to hold contents
+    #
+    #   Note: "print(cvsreader)" ONLY prints out an object to read the csv
+    #   file line-by-line. It doesn't actually take any action. It essentially
+    #   prints out the location where the infomation is stored and is not
+    #   useful for viewing purposes
+    #   ---------------------------- CODE BELOW ---------------------------- #
 with open(csvpath) as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',')
-    #print(csvreader) # prints out an object to read my csv file line-by-
-                     # line
+    #print("-" * 30)
+    #print(csvreader)
+    #print("-" * 30)
 
-                # --------------- What's happening here? --------------- #
-                # Reading header row first and printing to screen
-                # --------------- Code listed below -------------------- #
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Reading header row first and printing to screen
+    #   ---------------------------- CODE BELOW ---------------------------- #
     csv_header = next(csvreader)
-    print(f"CSV Header: {csv_header}")
+    #print(f"CSV Header: {csv_header}")
     print("")
 
-                # --------------- What's happening here? --------------- #
-                # Looping through each row of data after the header
-                # --------------- Code listed below -------------------- #
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Loop through each row of data after the header
+    #   ---------------------------- CODE BELOW ---------------------------- #
     for row in csvreader:
         name = row[2]
         total_votes += 1
@@ -53,44 +57,65 @@ with open(csvpath) as csvfile:
         else:
             candidates[name] = 1
 
-                # {candidates} is the dictionary...missing step is adding
-                # name to candidate keys, since there should be a [key]
-                # and a [value]
-                # Google how to add a key to my existing dictionary
-                # Note: you can increment a key, but not a string
-
-                # --------------- What's happening here? --------------- #
-                # Looping through each row of data after the header
-                # --------------- Code listed below -------------------- #
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   {candidates} is the dictionary...missing step is adding name to
+    #   candidate keys, since there should be a [key] and a [value]
+    #
+    #   Google how to add a key to the existing dictionary called "candidates"
+    #   Note: you can increment a key, but not a string
+    #   ---------------------------- CODE BELOW ---------------------------- #
 for key, value in candidates.items():
     candidates_percentage[key] = round((value/total_votes)*100,2)
+#print(candidates_percentage)
 
-print(candidates_percentage)
-
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Loop through candidate list to establish a winner by total vote count
+    #   ---------------------------- CODE BELOW ---------------------------- #
 for key in candidates.keys():
     if candidates[key] > winner_count:
         winner = key
         winner_count = candidates[key]
 
-print("")
-
-                # --------------- What's happening here? --------------- #
-                # Printing output/results to screen as a preview
-                # --------------- Code listed below -------------------- #
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Printing output/results to screen as a preview
+    #   ---------------------------- CODE BELOW ---------------------------- #
 print("Election Results")
-print("----------------------------")
-print(f"Total Votes: {total_votes:,}")
-print("----------------------------")
+print("-" * 30)
+print("Total Votes: " + str("{:,}".format(total_votes)))
+print("-" * 30)
 
 for key, value in candidates.items():
-    print(f"key + : (candidates_percentage:3f) + "%" + {value}")  # FIX THIS LINE!!!
+    print(key + ": " + str(candidates_percentage[key]) + "% (" + str("{:,}".format(value) + ")"))
+print("-" * 30)       
+    #print(candidates)
+    #print("")
+print("Winner: " + winner)
+print("-" * 30)       
+    #print(candidates.keys())
+    #print("")
 
-                #print(candidates)
-                #print("")
-print(f"Winner: {winner}")
-print("")
-                #print(candidates.keys())
-                #print("")
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Specify the file to write to (set exit path)
+    #   ---------------------------- CODE BELOW ---------------------------- #
+pypoll_output = os.path.join('PyPoll', 'Resources', 'election_results.txt') 
 
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Open the output file using "write" mode
+    #   Specify the variable to hold the contents
+    #   Write out results to text file
+    #   ---------------------------- CODE BELOW ---------------------------- #
+with open(pypoll_output, "w") as txtfile:
 
-
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Write data to new file
+    #   ---------------------------- CODE BELOW ---------------------------- #
+    txtfile.write("\n")
+    txtfile.write("Election Results" + '\n')
+    txtfile.write(("-" * 30) + '\n')
+    txtfile.write("Total Votes: " + str("{:,}".format(total_votes)) + '\n')
+    txtfile.write(("-" * 30) + '\n')
+    for key, value in candidates.items():
+        txtfile.write(key + ": " + str(candidates_percentage[key]) + "% (" + str("{:,}".format(value) + ")") + '\n')
+    txtfile.write(("-" * 30) + '\n')
+    txtfile.write("Winner: " + winner + '\n')
+    txtfile.write(("-" * 30) + '\n')
