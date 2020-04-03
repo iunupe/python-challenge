@@ -1,126 +1,101 @@
-                # --------------- What's happening here? --------------- #
-                # Import os module - allows us to create file paths across
-                # operating systems
-                # Import csv module for reading csv files
-                # --------------- Code listed below -------------------- #
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Import dependencies: os module & csv module
+    #   os - allows you to create file paths across operating systems
+    #   csv - for reading in csv files
+    #   ---------------------------- CODE BELOW ---------------------------- #
 import os
 import csv
-                # --------------- What's happening here? --------------- #
-                # Set path & "join" file         
-                # --------------- Code listed below -------------------- #
+    
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Set path & "join" file         
+    #   ---------------------------- CODE BELOW ---------------------------- #
 csvpath = os.path.join('PyBank', 'Resources', 'budget_data.csv') 
 
-                # --------------- What's happening here? --------------- #
-                # Set text file output parameters
-                # --------------- Code listed below -------------------- #
-text_file_path = "output.txt"
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Name the output file         
+    #   ---------------------------- CODE BELOW ---------------------------- #
+#output_file = "pybank_results.txt"
 
-                # --------------- What's happening here? --------------- #
-                # Set variables, empty lists & text formatting
-                # --------------- Code listed below -------------------- #
-total_months = 0
-total_revenue = 0
-revenue = []
-previous_revenue = 0
-month_of_change = []
-revenue_change = 0
-revenue_average = 0
-revenue_change_list = []
-greatest_increase = ["", 0]
-greatest_decrease = ["", 9999999]
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Set variables, empty lists, dictionaries & string/text formatting        
+    #   ---------------------------- CODE BELOW ---------------------------- #
+dates = []
+transactions = []
+change = []
 
-                # --------------- What's happening here? --------------- #
-                # Now, we can open the csv file, using "with open"
-                # --------------- Code listed below -------------------- #
-with open(csvpath) as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=',')                
-                
-                # --------------- What's happening here? --------------- #   
-                # Read the header row first (skip this step if there is no header)
-                # --------------- Code listed below -------------------- #
-    csv_header = next(csvreader)
-    print(f"CSV Header: {csv_header}")
-                                                              
-                # --------------- What's happening here? --------------- #
-                # Loop through column 1 (index=0) to find total months
-                # --------------- Code listed below -------------------- #               
-    #month_counter = 0
-    for row in csvreader:
-        #month_counter += 1
-        # print(row)
-        total_months += 1
-    #print(month_counter)                    # Total # of months = 86 
-    print(total_months)            
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Open & automatically close file using "with open" function        
+    #   ---------------------------- CODE BELOW ---------------------------- #
+with open('/Users/Tito/bootcamp_homework/python-challenge/PyBank/Resources/budget_data.csv') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')                      
 
-                # --------------- What's happening here? --------------- #
-                # Calculate total revenue over entire period
-                # --------------- Code listed below -------------------- # 
-       # total_revenue = total_revenue + float(row["Profit/Losses"])  
-   # print(total_revenue)    
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Use For loop and row counter to iterate through the data      
+    #   ---------------------------- CODE BELOW ---------------------------- #
+    row = 0
+    for i in csvreader:
 
-                # --------------- What's happening here? --------------- #
-                # Calculate avgerage monthly change in revenue over entire
-                # period 
-                # --------------- Code listed below -------------------- # 
-revenue_change = float(row["Profit/Losses"]) - previous_revenue
-previous_revenue = float(row["Profit/Losses"])
-revenue_change_list = revenue_change_list + [revenue_change]
-month_of_change = [month_of_change] + [row["Date"]]
-        
+        if row >=1:
+            dates.append(i[0])
+            transactions.append(i[1])
 
+        row = row +1
+    
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Calculate total months, using "len" function      
+    #   ---------------------------- CODE BELOW ---------------------------- #   
+    months = len(dates)
 
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Calculate Profits/Losses over entire period, using list comprehension      
+    #   ---------------------------- CODE BELOW ---------------------------- #   
+    transactions = [int(i) for i in transactions]
+    totals = sum(transactions)
 
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Calculate Average Change of Profits/Losses over entire period
+    #   First, calculate change in value from day-to-day, then use Avg f(x)      
+    #   ---------------------------- CODE BELOW ---------------------------- # 
+    change = [y-x for x, y in zip(transactions[:-1], transactions[1:])]
 
-                # --------------- What's happening here? --------------- #
-                # Calculate total revenue over entire period
-                # --------------- Code listed below -------------------- # 
+    def Average(lst):
+        return sum(lst) / len(lst)
 
+    average = Average(change)
 
-                # --------------- What's happening here? --------------- #
-                # Calculate total revenue over entire period
-                # --------------- Code listed below -------------------- # 
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Calculate greatest increase/decrease in profits and peg the dates      
+    #   ---------------------------- CODE BELOW ---------------------------- #  
+    Greatest_Increase = max(change)
+    Greatest_Increase_Date = str(dates[change.index(max(change))])
 
+    Greatest_Decrease = min(change)
+    Greatest_Decrease_Date = str(dates[change.index(min(change))])
 
-                # --------------- What's happening here? --------------- #
-                # Calculate total revenue over entire period
-                # --------------- Code listed below -------------------- # 
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Printing output/results to screen as a preview, using line method
+    #   ---------------------------- CODE BELOW ---------------------------- #
+line0 = '                   '
+line1 = ' Financial Analysis'
+line2 = ("-" *30)
+line3 = ' Total Months: %d' %(months)
+line4 = " Total: $" + str("{:,}".format(totals))
+line5 = ' Average Change: ' '${:,.2f}'.format(average)
+line6 = ' Greatest Increase in Profits: ' + Greatest_Increase_Date + ' $'+ str("{:,}".format((Greatest_Increase)))
+line7 = ' Greatest Decrease in Profits: ' + Greatest_Decrease_Date + ' $'+ str("{:,}".format((Greatest_Decrease)))
 
+output = line0 + '\n' + line1 + '\n' + line2 + '\n' + line3 + '\n' + line4 + '\n' + line5 + '\n' + line6 + '\n' + line7
+print(output)
 
-
-
-
-
-
-
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Specify the file to write to (set exit path)
+    #   ---------------------------- CODE BELOW ---------------------------- #
+pybank_output = os.path.join('/Users/Tito/bootcamp_homework/python-challenge/PyBank/Resources/pybank_results.txt') 
 
 
-
-
-
-
-
-
-
-
-
-
-
-# greatest_increase = revenue[0]
-# greatest_decrease = revenue[0]
-# total_revenue = 0
-
-# for garfield in range(len(revenue)):
-
-#     if revenue[garfield] >= greatest_increase:
-#        greatest_increase = revenue[garfield]
-#        greatest_increase_month = months[garfield]
-
-#     elif revenue[garfield] <= greatest_decrease:
-#        greatest_decrease = revenue[garfield]
-#        greatest_decrease_month = months[garfield]
-
-#     total_revenue += revenue[garfield]
-
-# print(total_revenue)
-
-
+    #   ------------------------------ NOTES! ------------------------------ #
+    #   Open the output file using "write" mode
+    #   Write out results to text file
+    #   ---------------------------- CODE BELOW ---------------------------- #
+with open(pybank_output, 'w') as outputfile:
+    outputfile.write(output)

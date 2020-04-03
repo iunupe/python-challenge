@@ -1,10 +1,11 @@
     #   ------------------------------ NOTES! ------------------------------ #
     #   Import dependencies: os module & csv module
     #   os - allows you to create file paths across operating systems
-    #   csv - for reading csv files
+    #   csv - for reading in csv files
     #   ---------------------------- CODE BELOW ---------------------------- #
 import os
 import csv
+    
     #   ------------------------------ NOTES! ------------------------------ #
     #   Set path & "join" file         
     #   ---------------------------- CODE BELOW ---------------------------- #
@@ -32,7 +33,7 @@ winner_count = 0
     #   prints out the location where the infomation is stored and is not
     #   useful for viewing purposes
     #   ---------------------------- CODE BELOW ---------------------------- #
-with open(csvpath) as csvfile:
+with open('/Users/Tito/bootcamp_homework/python-challenge/PyPoll/Resources/election_data.csv') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',')
     #print("-" * 30)
     #print(csvreader)
@@ -53,7 +54,7 @@ with open(csvpath) as csvfile:
         total_votes += 1
       
         if name in candidates.keys():
-            candidates[name] +=1
+            candidates[name] += 1
         else:
             candidates[name] = 1
 
@@ -97,7 +98,7 @@ print("-" * 30)
     #   ------------------------------ NOTES! ------------------------------ #
     #   Specify the file to write to (set exit path)
     #   ---------------------------- CODE BELOW ---------------------------- #
-pypoll_output = os.path.join('PyPoll', 'Resources', 'election_results.txt') 
+pypoll_output = os.path.join('/Users/Tito/bootcamp_homework/python-challenge/PyPoll/Resources/election_results.txt') 
 
     #   ------------------------------ NOTES! ------------------------------ #
     #   Open the output file using "write" mode
